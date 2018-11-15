@@ -3,7 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\facades\schema;
+// use Illuminate\Support\facades\schema;
+use Schema;
 //use Illuminate\Http\Resources\Json\Resource;
 
 class AppServiceProvider extends ServiceProvider

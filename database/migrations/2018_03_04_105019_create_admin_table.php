@@ -13,7 +13,7 @@ class CreateAdminTable extends Migration
      */
     public function up()
     {
-        Schema::create('Admins', function (Blueprint $table) {
+        Schema::create('admins', function (Blueprint $table) {
             $table->increments('id');
             $table->string('fname');
             $table->string('lname');         
@@ -33,6 +33,6 @@ class CreateAdminTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('Admins');
+        Schema::dropIfExists('admins');
     }
 }
