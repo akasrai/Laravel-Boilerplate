@@ -8,7 +8,4 @@
                 {{ session('status') }}
             </div>
         @endif
-
-        <articles></articles>
-          
 @endsection

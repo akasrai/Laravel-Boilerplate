@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h2>Articles Posted</h2>
+		<h2>Blogs Posted</h2>
 
 		<form @submit.prevent = "addArticle" class="mb-3">
 			<div class="form-group">
@@ -50,10 +50,11 @@
 				},
 				article_id: '',
 				pagination : {},
-				edit : false
+				edit : false,
+				api_token: this.$root.api_token
 			};
 		},
-
+		
 		created() {
 			this.fetchArticles();
 		},
@@ -61,16 +62,20 @@
 		methods: {
 			fetchArticles(page_url) {
 				let vm = this;
-				page_url = page_url || 'http://127.0.0.1:8000/api/admin/articles';
-				fetch(page_url)
-					.then(res => res.json())
-					.then(res => {
-						
-						this.articles = res.data;
-						vm.makePagination(res.meta, res.links);
-					})
+				page_url = page_url || 'http://127.0.0.1:8000/api/admin/blogs';
+				
+				axios.get(page_url, {
+              params: {
+                api_token: vm.api_token
+              }
+            })
+				.then(res => {
+					console.log(res);
+					this.articles = res.data.data;
+					vm.makePagination(res.data.meta, res.data.links);
+				})
 
-					.catch(err => console.log(err));
+				.catch(err => console.log(err));
 			},
 			makePagination(meta, links){
 
@@ -85,7 +90,7 @@
 			},
 			deleteArticle(id){
 				if(confirm('Are you Sure?')){
-					fetch(`http://127.0.0.1:8000/api/admin/article/${id}`, {
+					fetch(`http://127.0.0.1:8000/api/admin/blog/${id}`, {
 						method : 'delete'
 					})
 					.then(res => res.json())
@@ -99,8 +104,8 @@
 			addArticle(){
 				if(this.edit === false){
 					//add
-					fetch('http://127.0.0.1:8000/api/admin/article',{
-						method: 'post',
+					fetch('http://127.0.0.1:8000/api/admin/blog',{
+						method: 'put',
 						body: JSON.stringify(this.article),
 						headers: {
 							'content-type': 'application/json'
@@ -115,16 +120,14 @@
 					})
 					.catch(err => console.log(err));
 				}else{
+					
+					let vm = this;
 
 					//edit
-					fetch('http://127.0.0.1:8000/api/admin/article',{
-						method: 'put',
-						body: JSON.stringify(this.article),
-						headers: {
-							'content-type': 'application/json'
-						}
-					})
-					.then(res => res.json())
+					let config = { headers: {'Authorization': 'Bearer '  + vm.api_token }};
+					let url = "http://127.0.0.1:8000/api/admin/blog";
+
+					axios.put( url, this.article, config)
 					.then(data => {
 						this.article.title = '';
 						this.article.body = '';

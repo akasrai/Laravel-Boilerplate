@@ -14,3 +14,13 @@
         <articles></articles>
           
 @endsection
+@section('scripts')
+<script>
+    var app = new Vue({
+        el: '#app',
+        data:{
+            api_token: '{{Auth::user()->api_token}}'
+        }
+    });
+</script>
+@endsection

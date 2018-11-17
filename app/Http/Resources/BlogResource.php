@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\Resource;
 
-class Article extends Resource
+class BlogResource extends Resource
 {
     /**
      * Transform the resource into an array.
@@ -14,13 +14,8 @@ class Article extends Resource
      */
     public function toArray($request)
     {
-        //returns all the value
-        //return parent::toArray($request);
-
-        //date format
         $date = date('M j, Y', strtotime($this->created_at));
         $time = date('h:ia', strtotime($this->created_at));
-        //returns only the selected value
         return [
             'id' => $this->id,
             'title' => $this->title,

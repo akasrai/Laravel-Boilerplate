@@ -55,7 +55,6 @@
 	</div>
           
 @endsection
-
 @section('scripts')
 	<script>
 		var app = new Vue({

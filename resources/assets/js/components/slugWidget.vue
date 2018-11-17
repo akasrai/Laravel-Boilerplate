@@ -44,7 +44,7 @@
 <script>
     export default {
         
-       props: {
+      props: {
         url: {
           type: String,
           required: true
@@ -90,7 +90,7 @@
           let vm = this;
 
           if (this.api_token && slug) {
-            axios.get('/api/posts/unique', {
+            axios.get('/api/blog/unique', {
               params: {
                 api_token: vm.api_token,
                 slug: slug

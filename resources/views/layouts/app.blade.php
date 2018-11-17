@@ -75,6 +75,7 @@
         </nav>
 
         @yield('content')
+        <article></article>
     </div>
 
     <!-- Scripts -->
