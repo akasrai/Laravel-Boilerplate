@@ -24,9 +24,6 @@ Vue.component('singlearticle', require('./components/SingleArticle.vue'));
 
 // var app = new Vue({
 //     el: '#app',
-//     data:{
-// 			title: ''
-// 		}
 // });
 
 //require('./manage')

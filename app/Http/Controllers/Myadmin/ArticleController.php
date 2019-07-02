@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Myadmin;
 
 use App\Article;
-use Illuminate\Http\Request;
 use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Article as ArticleResource; // importing Article model as ArticleResource 
 
@@ -19,11 +19,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        //get articles
-
         $articles = Article::orderBy('created_at','desc')->paginate(5); // to get all data use get() instead of paginate()
-
-        //return collection of articles as resource
         return ArticleResource::collection($articles);
     }
 

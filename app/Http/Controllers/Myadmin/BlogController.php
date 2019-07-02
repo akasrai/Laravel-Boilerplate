@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Myadmin;
 
-use Illuminate\Http\Request;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use App\Blog;
 use Auth;
 use Session;
+use App\Blog;
+use App\Http\Requests;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\BlogResource; // importing Article model as ArticleResource 
+
 
 class BlogController extends Controller
 {
-
-    
     /**
      * Create a new controller instance.
      *
@@ -20,8 +20,7 @@ class BlogController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:admin',['except' => ['apiCheckUnique']]); // for admin authentication
-        // $this->middleware('auth:admin'); //for role access
+        $this->middleware('auth:admin',['except' => ['apiCheckUnique','getAllBlogs','store']]); // for admin authentication
         $this->middleware('superadmins'); //for role access
 
     }
@@ -34,6 +33,14 @@ class BlogController extends Controller
     public function index()
     {
         return view('myadmin/blog/index');
+    }
+
+    public function getAllBlogs()
+    {
+        $blogs = Blog::orderBy('created_at','desc')->paginate(5); // to get all data use get() instead of paginate()
+
+        //return collection of articles as resource
+        return BlogResource::collection($blogs);
     }
 
     /**
@@ -55,7 +62,25 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $article = $request->isMethod('put') ? Blog::findOrFail($request->article_id) : new Blog;
+
+        $article->id                = $request->input('article_id');
+        // $article->slug              = $request->input('slug');
+        // $article->auther_id         = $request->input('auther_id');
+        $article->title             = $request->input('title');
+        $article->body              = $request->input('body');
+        // $article->excerpt           = $request->input('excerpt');
+        // $article->featured_image    = $request->input('featured_image');
+        // $article->status            = $request->input('status');
+        // $article->type              = $request->input('type');
+        // $article->published_at      = $request->input('published_at');
+        $article->created_at        = $request->isMethod('put') ? $request->input('created_at') :date("Y-m-d H:i:s");
+        $article->updated_at        = date("Y-m-d H:i:s");
+
+        if($article->save()){
+
+            return new BlogResource($article);
+        }
     }
 
     /**
